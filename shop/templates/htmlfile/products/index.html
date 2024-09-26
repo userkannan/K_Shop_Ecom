@@ -1,0 +1,61 @@
+{% extends 'htmlfile/layouts/main.html' %}
+{% block title %}
+product
+{% endblock title %}
+<style>
+
+
+.new_price {
+    font-weight: bold; background-color: green; color: white; padding: 2px; border-radius: 20px;
+}
+</style>
+{% block content %}
+    <section class="bg-light py-4 my-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <h4 class="mb-3">{{catagory_name}} products</h4>
+                    <hr style="border-color: #b8bfc2;">
+                </div>
+                {% include 'htmlfile/include/message.html' %}    
+                {% for item in product %}
+                <div class="col-md-4 col-lg-3 mx-3 mb-4">
+                    <div class="card shadow-sm border-0">
+                        {% if item.trending %}
+                        <div class="hot" 
+                        style=" background-color: orangered;
+                        color: white;
+                        width: 50px;
+                        text-align: center;
+                        font-weight: bold;
+                        display: inline;
+                        border-radius: 0px 0px 0px 5px ;
+                        padding: 5px;
+                        position: absolute;
+                        top: 0;
+                        right: 0;
+                        z-index: 10;">hot</div>
+                        {% endif %}
+                        <img src="{{item.Product_image.url}}" class="card-img-top" alt="Category" style="object-fit: cover; height: 150px; width: 100%;">
+                        <a href="{% url 'product_details' catagory_name  item.name %}" style="cursor: pointer; text-decoration: none;" >
+                        <div class="card-body">
+                            <h5 class="card-title text-primary">{{ item.name }}</h5>
+                            <p class="card-text">
+                                <span class="float-start old_price" style="font-weight: bold; color: red;"><s>Rs.{{ item.original_price | stringformat:'d'}}</s></span>
+                                <span class="float-end new_price" style="font-weight: bold; background-color: green; color: white; padding: 2px; border-radius: 10px;">
+                                    Rs.{{ item.selling_price | stringformat:'d' }}</span>
+                            </p>
+                        </div>
+                        </a>
+                    </div>
+                </div>
+                
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+{% endblock content %}
+ 
+
+  
