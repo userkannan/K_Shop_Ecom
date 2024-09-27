@@ -58,6 +58,13 @@ def catagoryview(request,name):
         messages.warning(request,"No Such Catagory Found ")
         return redirect('catagory')
     
+def cart(request):
+    if request.user.is_authenticated:
+        cart=Cart.objects.filter(user=request.user)
+        return render(request,"htmlfile/cart.html",{"cart":cart})
+    else:
+        return redirect("/") 
+    
 def product_details(request,cname,pname):
     if(Catagory.objects.filter(name=cname,status=0)):
         if(Product.objects.filter(name=pname,status=0)):
@@ -91,3 +98,41 @@ def add_cart(request):
             return JsonResponse({'status':'Login to Add Cart'},status=200)
     else:
         return JsonResponse({'status':'Invalid Access'},status=200)
+    
+def remove_cart(request,cid):
+    cartitem=Cart.objects.get(id=cid)
+    cartitem.delete()
+    return redirect("/cart")
+
+def heart(request):
+    if request.headers.get('X-requested-with')=='XMLHttpRequest':
+        if request.user.is_authenticated:
+            data=json.load(request)
+            product_id=data['pid']
+            product_status=Product.objects.get(id=product_id)
+            if product_status:
+                if Heart.objects.filter(user=request.user.id,product_id=product_id):
+                    return JsonResponse({'status':'Product Already in Favouite'},status=200)
+                else:
+                    Heart.objects.create(user=request.user,product_id=product_id)
+                    return JsonResponse({'status':'Product Added to Favourite'},status=200)
+        else:
+            return JsonResponse({'status':'Login to Add Favourite'},status=200)
+    else:
+        return JsonResponse({'status':'Invalid Access'},status=200)
+    
+def heart_page(request):
+    if request.user.is_authenticated:
+        heart=Heart.objects.filter(user=request.user)
+        return render(request,"htmlfile/heart.html",{"heart":heart})
+    else:
+        return redirect("/")
+    
+def remove_heart(request,hid):
+    cartitem=Heart.objects.get(id=hid)
+    cartitem.delete()
+    return redirect("/heart_page")
+    
+    
+    
+    

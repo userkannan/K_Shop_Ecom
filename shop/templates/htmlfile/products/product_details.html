@@ -58,7 +58,7 @@ product
                         {% else %}
                         <button class="btn btn-secondary"><i class="fa fa-minus"></i>Out of Stock</button>
                         {% endif %}
-                        <button class="btn btn-danger"><i class="fa fa-heart"></i></button>
+                        <button class="btn btn-danger" id="btnheart"><i class="fa fa-heart"></i></button>
                     </div>
                 </div>
             </div>
@@ -71,6 +71,7 @@ product
             const txtQty = document.getElementById("txtQty")
             const pid = document.getElementById("pid")
             const btnCart = document.getElementById("btnCart")
+            const btnheart = document.getElementById("btnheart")
 
             btnPlus.addEventListener("click", function(){
                 let qty=parseInt(txtQty.value,10);
@@ -123,7 +124,31 @@ product
                     alert("please Enter The Quantity")
                 }
             })
-        })
+
+            btnheart.addEventListener("click", function(){
+                    let postObj = {
+                        'pid' : pid.value
+                    }
+                    // console.log(postObj)
+                    fetch("/heart",{
+                        method: 'POST',
+                        credentials: 'same-origin',
+                        headers:{
+                            'Accept': 'application/json',
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'X-CSRFToken': '{{ csrf_token }}',
+                        },
+                        body: JSON.stringify(postObj)                        
+                    }).then(response => {
+                        return response.json();
+                    }).then(data => {
+                        // console.log(data)
+                        alert(data['status'])
+                    })
+                })
+            })
+       
+        
 
 
     </script>
