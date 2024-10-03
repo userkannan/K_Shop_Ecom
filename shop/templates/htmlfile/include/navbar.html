@@ -1,3 +1,5 @@
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.14.0/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="/resources/demos/style.css">
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
     <div class="container-fluid">
       <a class="navbar-brand" href="{% url 'home' %}"><i class="fa fa-cart-plus"></i> K-Shop</a>
@@ -36,10 +38,32 @@
             <a class="nav-link" href="{% url 'heart_page' %}"><i class="fa fa-heart"></i> Favourite</a>
           </li>
         </ul>
-        <form class="d-flex">
-          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-          <button class="btn btn-outline-success" type="submit">Search</button>
+        <form class="d-flex"  method="POST" action="{% url 'searchview'  %}">
+          {% csrf_token %}
+          <input class="form-control" type="search" id="searchproduct" placeholder="Search Products" name="searchname" required>
+          <button class="input-group-text" type="submit" id="basic-addon1"><i class="fa fa-search"></i></button>
         </form>
       </div>
     </div>
   </nav>
+  <script src="https://code.jquery.com/jquery-3.7.1.js"></script> 
+  <script src="https://code.jquery.com/ui/1.14.0/jquery-ui.js"></script>
+  <script>
+    var availableTags = [];
+
+    $.ajax({
+      method: "GET",
+      url: "/search_product",
+      success: function (response){
+        availableTags = response
+        startAutocomplete(response)
+      }
+    })
+
+    function startAutocomplete(availableTags){
+      $( "#searchproduct" ).autocomplete({
+        source: availableTags
+      });
+    }
+  
+  </script>

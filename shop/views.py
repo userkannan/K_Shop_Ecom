@@ -132,6 +132,52 @@ def remove_heart(request,hid):
     cartitem=Heart.objects.get(id=hid)
     cartitem.delete()
     return redirect("/heart_page")
+
+def search_product(request):
+    product=Product.objects.filter(status=0).values_list('name', flat=True)
+    productList=list(product)
+    
+    return JsonResponse(productList,safe=False)
+
+def searchview(request):
+    # if request.method == 'GET':
+    searchedterm= request.POST.get('searchname')
+    if(Product.objects.filter(name = searchedterm,status=0)):
+        result = Product.objects.filter(name=searchedterm).first()
+        # return render(request,"htmlfile/searchview.html",{"product":result})
+        return render(request,"htmlfile/products/product_details.html",{"product":result})
+    else:
+        messages.error(request,"No such Catagory Found")
+        return redirect('catagory')
+        
+    #     searchedterm= request.GET.get('searchname')
+    #     if(Product.objects.filter(name=searchedterm,status=0)):
+    #          product=Product.objects.filter(name=searchedterm,status=0).first()
+    #          return render(request,"htmlfile/searchview.html",{"product":product})
+    
+    # search_product = request.GET.get('searchname')
+    # result = Product.objects.filter(name = search_product)
+    # if result:
+    #     resul = Product.objects.all()
+    # else:
+    #     result = False
+    # return render(request,"htmlfile/products/product_details.html",{"product":resul})
+            
+        # if searchedterm == "":
+        #     return redirect(request.META.get('HTTP_REFERER'))
+        # else:
+        #     # product = Product.objects.filter(name__contains=searchedterm).first()
+        #     product=Product.objects.filter(name=searchedterm,status=0).first()
+        #     return render(request,"htmlfile/searchview.html",{"product":product})
+            
+            # if product:
+            #     # product=Product.objects.filter(status=0).first()
+            #     # return render(request,"htmlfile/products/product_details.html",{"product":product})
+            #     # return redirect("product_details/"+product.catagory.slug+'/'+product.slug)
+            # else:
+            #     messages.error(request,"Not foun youer search")
+            #     return redirect("/")
+    
     
     
     
