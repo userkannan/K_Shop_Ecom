@@ -5,31 +5,131 @@
 {% endblock title %}
 
 {% block content %}
+<style>
+    body {
+        background-color: #f8f9fa;
+        font-family: Arial, sans-serif;
+    }
+
+    .bg-light {
+        background-color: #f9f9f9;
+    }
+
+    .container {
+        padding: 20px;
+    }
+
+    .mb-3 {
+        font-size: 1.5rem;
+        color: #007bff;
+        font-weight: bold;
+    }
+
+    hr {
+        border-color: #b8bfc2;
+        margin: 10px 0;
+    }
+
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .table th, .table td {
+        padding: 12px;
+        text-align: left;
+        border-bottom: 1px solid #dee2e6;
+    }
+
+    .table th {
+        background-color: #007bff;
+        color: white;
+    }
+
+    .table tr:hover {
+        background-color: #f1f1f1;
+    }
+
+    .table img {
+        border-radius: 5px;
+    }
+
+    .btn-danger {
+        background-color: #dc3545;
+        border: none;
+    }
+
+    .btn-danger:hover {
+        background-color: #c82333;
+    }
+
+    @media (max-width: 768px) {
+        .mb-3 {
+            font-size: 1.25rem;
+        }
+
+        .table th, .table td {
+            font-size: 0.9rem;
+            padding: 10px;
+        }
+
+        .table img {
+            height: 50px; /* Adjust image height for smaller screens */
+        }
+
+        .btn-sn {
+            font-size: 0.8rem;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .mb-3 {
+            font-size: 1.1rem;
+        }
+
+        .table th, .table td {
+            padding: 8px;
+            font-size: 0.85rem; /* Further reduce font size on very small screens */
+        }
+
+        .table img {
+            height: 40px; /* Further reduce image height */
+        }
+
+        .btn-sn {
+            font-size: 0.75rem;
+        }
+    }
+</style>
+
 <section class="bg-light py-4 my-5" style="min-height: 600px;">
     <div class="container">
         <div class="row">
             <div class="col-12">
                 <div class="mb-3">Favourite Item</div>
-                <hr style="border-color: #b8bfc2;">
+                <hr>
             </div>
+        </div>
+        <table class="table">
+            <tr>
+                <th>Image</th>
+                <th>Product Name</th>
+                <th>Unit</th>
+                <th>Remove</th>
+            </tr>
+            {% for item in heart %}
+            <tr>
+                <td><img src="{{ item.product.Product_image.url }}" height="75px" alt="{{ item.product.name }}"></td>
+                <td><a href="{% url 'product_details' item.product.catagory.name item.product.name %}" style="text-decoration: none;">{{ item.product.name }}</a></td>
+                <td>{{ item.product.selling_price | stringformat:'d' }}</td>
+                <td><a href="{% url 'remove_heart' item.id %}" onclick="return confirm('Are you sure you want to remove this item?')" class="btn btn-danger btn-sn"><i class="fa fa-trash"></i> Remove</a></td>
+            </tr>
+            {% endfor %}
+        </table>
     </div>
-    <table class="table table-borderd">
-        <tr>
-            <th>Image</th>
-            <th>Product Name</th>
-            <th>Unit</th>
-            <th>Remove</th>
-        </tr>
-        {% for item in heart %}
-        <tr>
-            <td><img src="{{item.product.Product_image.url}}" height="75px" alt="{{item.product.name}}"></td>
-            <td>{{item.product.name}}</td>
-            <td>{{item.product.selling_price | stringformat:'d'}}</td>
-            <td><a  href="{% url 'remove_heart' item.id %}" onclick="return confirm('are you sure? to Remove')" class="btn btn-danger btn-sn"><i class="fa fa-trash"></i> Remove</a></td>
-        </tr>
-        {% endfor %}
-    </table>
-    </div>
-
 </section>
 {% endblock content %}

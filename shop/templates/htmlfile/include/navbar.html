@@ -1,69 +1,118 @@
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.14.0/themes/base/jquery-ui.css">
 <link rel="stylesheet" href="/resources/demos/style.css">
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css">
+
+<style>
+    .navbar {
+        background-color: #343a40; /* Dark background */
+    }
+    .nav-link {
+        color: #ea1212; /* Default light text color */
+        transition: background-color 0.3s, color 0.3s;
+    }
+    .nav-link:hover {
+        background-color: #007bff; /* Bootstrap primary color on hover */
+        color: #fff; /* White text on hover */
+    }
+    .nav-icon {
+        margin-right: 5px; /* Space between icon and text */
+    }
+    
+    /* Specific colors for each nav item */
+    .nav-home {
+        color: #28a745; /* Green for Home */
+    }
+    .nav-collection {
+        color: #ffc107; /* Yellow for Collection */
+    }
+    .nav-cart {
+        color: #17a2b8; /* Cyan for Cart */
+    }
+    .nav-favorite {
+        color: #dc3545; /* Red for Favourite */
+    }
+
+    /* Dropdown menu styles */
+    .nav-item .dropdown-menu {
+        background-color: #343a40; /* Dark background for dropdown */
+    }
+    .dropdown-item {
+        color: #f8f9fa; /* Light text for dropdown items */
+    }
+    .dropdown-item:hover {
+        background-color: #007bff; /* Highlight dropdown items on hover */
+        color: #fff; /* White text on hover */
+    }
+</style>
+
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top">
     <div class="container-fluid">
-      <a class="navbar-brand" href="{% url 'home' %}"><i class="fa fa-cart-plus"></i> K-Shop</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="{% url 'home' %}"><i class="fa fa-home"></i>Home</a>
-          </li>
-          {% if request.user.is_authenticated %}
-            <a  class="nav-link" aria-current="page" href="#"><i class="fa fa-user"></i>{{request.user}}</a>
-            <a  class="nav-link" aria-current="page" href="{% url 'logout' %}"><i class="fa fa-sign-out"></i>Logout</a>
-          {% else %}
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'login' %}"><i class="fa fa-sign-in"></i>Login</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'register' %}"><i class="fa fa-user"></i>Register</a>
-            </li>
-          {% endif %}
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              <i class="fa fa-cubes"></i> Collection
-            </a>
-            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <li><a class="dropdown-item" href="{% url 'catagory' %}">Catagorys</a></li>
-              <li><a class="dropdown-item" href="#" style="display: unset;" >Products</a></li>
+        <a class="navbar-brand" href="{% url 'home' %}"><i class="fa fa-cart-plus"></i> K-Shop</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link nav-home" aria-current="page" href="{% url 'home' %}" ><i class="fa fa-home nav-icon"></i> Home</a>
+                </li>
+                {% if request.user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="#"><i class="fa fa-user nav-icon"></i> {{request.user}}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="{% url 'logout' %}"><i class="fa fa-sign-out nav-icon"></i> Logout</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'login' %}"><i class="fa fa-sign-in nav-icon"></i> Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'register' %}"><i class="fa fa-user-plus nav-icon"></i> Register</a>
+                    </li>
+                {% endif %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle nav-collection" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fa fa-cubes nav-icon"></i> Collection
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="{% url 'catagory' %}">Categories</a></li>
+                        <li><a class="dropdown-item" href="{% url 'product' %}">Products</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link nav-cart" href="{% url 'cart' %}"><i class="fa fa-shopping-cart nav-icon"></i> Cart</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link nav-favorite" href="{% url 'heart_page' %}"><i class="fa fa-heart nav-icon"></i> Favourite</a>
+                </li>
             </ul>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'cart' %}"><i class="fa fa-shopping-cart"></i> Cart</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'heart_page' %}"><i class="fa fa-heart"></i> Favourite</a>
-          </li>
-        </ul>
-        <form class="d-flex"  method="POST" action="{% url 'searchview'  %}">
-          {% csrf_token %}
-          <input class="form-control" type="search" id="searchproduct" placeholder="Search Products" name="searchname" required>
-          <button class="input-group-text" type="submit" id="basic-addon1"><i class="fa fa-search"></i></button>
-        </form>
-      </div>
+            <form class="d-flex" method="POST" action="{% url 'searchview' %}">
+                {% csrf_token %}
+                <input class="form-control me-2" type="search" id="searchproduct" placeholder="Search Products" name="searchname" required>
+                <button class="btn btn-outline-light" type="submit" id="basic-addon1"><i class="fa fa-search"></i></button>
+            </form>
+        </div>
     </div>
-  </nav>
-  <script src="https://code.jquery.com/jquery-3.7.1.js"></script> 
-  <script src="https://code.jquery.com/ui/1.14.0/jquery-ui.js"></script>
-  <script>
+</nav>
+
+<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+<script src="https://code.jquery.com/ui/1.14.0/jquery-ui.js"></script>
+<script>
     var availableTags = [];
 
     $.ajax({
-      method: "GET",
-      url: "/search_product",
-      success: function (response){
-        availableTags = response
-        startAutocomplete(response)
-      }
-    })
+        method: "GET",
+        url: "/search_product",
+        success: function (response) {
+            availableTags = response;
+            startAutocomplete(response);
+        }
+    });
 
-    function startAutocomplete(availableTags){
-      $( "#searchproduct" ).autocomplete({
-        source: availableTags
-      });
+    function startAutocomplete(availableTags) {
+        $("#searchproduct").autocomplete({
+            source: availableTags
+        });
     }
-  
-  </script>
+</script>

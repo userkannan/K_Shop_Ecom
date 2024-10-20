@@ -46,6 +46,10 @@ def register(request):
             return redirect('/login')
     return render(request,"htmlfile/register.html",{"form":form})
 
+def product(request):
+    product=Product.objects.filter(status=0)
+    return render(request,"htmlfile/product.html",{"product":product})
+
 def catagory(request):
     catagory=Catagory.objects.filter(status=0)  
     return render(request,"htmlfile/catagory.html",{"catagory":catagory})
